@@ -10,7 +10,7 @@ public class MessagePrinter {
     private MessageProducer producer;
     /*
     * Alternatywnie po dodaniu:
-    * 
+    *
     * <dependency>
 	*    <groupId>javax.enterprise</groupId>
 	*    <artifactId>cdi-api</artifactId>
