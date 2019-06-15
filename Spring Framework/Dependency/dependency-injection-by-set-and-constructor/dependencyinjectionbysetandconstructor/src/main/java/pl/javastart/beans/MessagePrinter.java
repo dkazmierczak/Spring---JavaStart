@@ -6,39 +6,37 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessagePrinter {
 
-    @Autowired
     private MessageProducer producer;
-    /*
-    * Alternatywnie po dodaniu:
-    *
-    * <dependency>
-	*    <groupId>javax.enterprise</groupId>
-	*    <artifactId>cdi-api</artifactId>
-	*    <version>1.2</version>
-    * </dependency>
-    *
-    * w pliku pom.xml
-    *
-    * możemy zamiast @Autowired użyć @Inject
-    *
-    * @Inject
-	* private MessageProducer producer;
-    * */
+    private MessageDecorator decorator;
 
     MessagePrinter() {}
 
+    @Autowired
     public MessagePrinter(MessageProducer producer) {
         this.producer = producer;
+    }
+
+    public MessagePrinter(MessageDecorator decorator) {
+        this.decorator = decorator;
+    }
+
+    @Autowired(required = false)
+    public void setDecorator(MessageDecorator decorator) {
+        this.decorator = decorator;
     }
 
     public MessageProducer getProducer() {
         return producer;
     }
+
+    // @Autwired można też w tym miejscu zamiast nad konstruktorem
     public void setProducer(MessageProducer producer) {
         this.producer = producer;
     }
 
     public void print() {
-        System.out.println(producer.getMessage());
+        String message = producer.getMessage();
+        message = decorator != null?decorator.decorate(message):message;
+        System.out.println(message);
     }
 }
